@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 as build-env
 
 COPY Source /Source
 
-RUN /bin/ash -c 'set -ex && \
+RUN set -ex && \
     ARCH=`uname -m` && \
     if [ "$ARCH" == "x86_64" ]; then \
        echo "x86_64" && \
@@ -12,9 +12,8 @@ RUN /bin/ash -c 'set -ex && \
        echo "aarch64" && \
        export RUNTIME_ID="linux-arm64" \
     fi; \
-    dotnet publish --runtime \$RUNTIME_ID -c Release -o /Source/bin/Publish/Linux-chardonnay /Source/LibationCli/LibationCli.csproj -p:PublishProfile=/Source/LibationCli/Properties/PublishProfiles/LinuxProfile.pubxml \
-    '
-RUN 
+    dotnet publish --runtime \$RUNTIME_ID -c Release -o /Source/bin/Publish/Linux-chardonnay /Source/LibationCli/LibationCli.csproj -p:PublishProfile=/Source/LibationCli/Properties/PublishProfiles/LinuxProfile.pubxml
+ 
 COPY Docker/liberate.sh /Source/bin/Publish/Linux-chardonnay
 
 
