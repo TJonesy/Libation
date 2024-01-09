@@ -6,11 +6,11 @@ COPY Source /Source
 RUN \
    sh -c 'set -ex; \
    ARCH=`uname -m`; \
-   if [ "$ARCH" == "x86_64" ]; then \
+   if [ "$ARCH" = "x86_64" ]; then \
       echo "x86_64"; \
       export RUNTIME_ID="linux-x64"; \
    else \
-      if [ "$ARCH" == "aarch64" ]; then \
+      if [ "$ARCH" = "aarch64" ]; then \
          echo "aarch64"; \
          export RUNTIME_ID="linux-arm64"; \
       fi; \
