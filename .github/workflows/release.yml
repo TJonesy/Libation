@@ -18,15 +18,6 @@ jobs:
           export TAG='${{ github.ref_name }}'
           echo "version=${TAG#v}" >> "${GITHUB_OUTPUT}"
 
-  docker:
-    needs: [prerelease]
-    uses: ./.github/workflows/docker.yml
-    with:
-      version: ${{ needs.prerelease.outputs.version }}
-    secrets:
-      docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
-      docker_token: ${{ secrets.DOCKERHUB_TOKEN }}
-
   build:
     needs: [prerelease]
     uses: ./.github/workflows/build.yml
