@@ -1,21 +1,16 @@
 # Dockerfile
-FROM mcr.microsoft.com/dotnet/sdk:8.0 as build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0.101-bookworm-slim-amd64 as build-env
+
+ARG TARGETARCH
+ARG TARGETOS
 
 COPY Source /Source
 
-RUN \
-   sh -c 'set -ex; \
-   ARCH=`uname -m`; \
-   if [ "$ARCH" = "x86_64" ]; then \
-      echo "x86_64"; \
-      export RUNTIME_ID="linux-x64"; \
-   else \
-      if [ "$ARCH" = "aarch64" ]; then \
-         echo "aarch64"; \
-         export RUNTIME_ID="linux-arm64"; \
-      fi; \
-   fi; \
-   dotnet publish --runtime $RUNTIME_ID -c Release -o /Source/bin/Publish/Linux-chardonnay /Source/LibationCli/LibationCli.csproj -p:PublishProfile=/Source/LibationCli/Properties/PublishProfiles/LinuxProfile.pubxml'
+RUN arch=$TARGETARCH \
+    && if [ "$arch" = "amd64" ]; then arch="x64"; fi \
+    && echo $TARGETOS-$arch > /tmp/rid
+
+RUN dotnet publish --runtime $(cat /tmp/rid) -c Release -o /Source/bin/Publish/Linux-chardonnay /Source/LibationCli/LibationCli.csproj -p:PublishProfile=/Source/LibationCli/Properties/PublishProfiles/LinuxProfile.pubxml
 
 COPY Docker/liberate.sh /Source/bin/Publish/Linux-chardonnay
 
