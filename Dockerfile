@@ -11,7 +11,7 @@ RUN \
       export RUNTIME_ID="linux-x64"; \
    else \
       if [ "$ARCH" == "aarch64" ]; then \
-         echo "aarch64"
+         echo "aarch64"; \
          export RUNTIME_ID="linux-arm64"; \
       fi; \
    fi; \
